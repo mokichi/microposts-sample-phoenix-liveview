@@ -1,0 +1,22 @@
+<h1>Show Micropost</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal SampleWeb.MicropostLive.FormComponent,
+    id: @micropost.id,
+    title: @page_title,
+    action: @live_action,
+    micropost: @micropost,
+    return_to: Routes.micropost_show_path(@socket, :show, @micropost) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Content:</strong>
+    <%= @micropost.content %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.micropost_show_path(@socket, :edit, @micropost), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.micropost_index_path(@socket, :index) %></span>

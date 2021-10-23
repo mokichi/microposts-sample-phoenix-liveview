@@ -1,0 +1,35 @@
+<h1>Listing Microposts</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal SampleWeb.MicropostLive.FormComponent,
+    id: @micropost.id || :new,
+    title: @page_title,
+    action: @live_action,
+    micropost: @micropost,
+    return_to: Routes.micropost_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Content</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="microposts">
+    <%= for micropost <- @microposts do %>
+      <tr id={"micropost-#{micropost.id}"}>
+        <td><%= micropost.content %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.micropost_show_path(@socket, :show, micropost) %></span>
+          <span><%= live_patch "Edit", to: Routes.micropost_index_path(@socket, :edit, micropost) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: micropost.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Micropost", to: Routes.micropost_index_path(@socket, :new) %></span>

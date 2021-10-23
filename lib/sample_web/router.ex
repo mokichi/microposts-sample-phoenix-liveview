@@ -18,6 +18,13 @@ defmodule SampleWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    live "/microposts", MicropostLive.Index, :index
+    live "/microposts/new", MicropostLive.Index, :new
+    live "/microposts/:id/edit", MicropostLive.Index, :edit
+
+    live "/microposts/:id", MicropostLive.Show, :show
+    live "/microposts/:id/show/edit", MicropostLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
