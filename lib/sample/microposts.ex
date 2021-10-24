@@ -18,7 +18,7 @@ defmodule Sample.Microposts do
 
   """
   def list_microposts do
-    Repo.all(Micropost)
+    Repo.all(from m in Micropost, order_by: [desc: m.id])
   end
 
   @doc """
@@ -53,6 +53,7 @@ defmodule Sample.Microposts do
     %Micropost{}
     |> Micropost.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:micropost_created)
   end
 
   @doc """
@@ -71,6 +72,7 @@ defmodule Sample.Microposts do
     micropost
     |> Micropost.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:micropost_updated)
   end
 
   @doc """
@@ -86,7 +88,9 @@ defmodule Sample.Microposts do
 
   """
   def delete_micropost(%Micropost{} = micropost) do
-    Repo.delete(micropost)
+    micropost
+    |> Repo.delete()
+    |> broadcast(:micropost_deleted)
   end
 
   @doc """
@@ -100,5 +104,15 @@ defmodule Sample.Microposts do
   """
   def change_micropost(%Micropost{} = micropost, attrs \\ %{}) do
     Micropost.changeset(micropost, attrs)
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Sample.PubSub, "microposts")
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+  defp broadcast({:ok, post}, event) do
+    Phoenix.PubSub.broadcast(Sample.PubSub, "microposts", {event, post})
+    {:ok, post}
   end
 end

@@ -6,6 +6,8 @@ defmodule SampleWeb.MicropostLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Microposts.subscribe()
+
     {:ok, assign(socket, :microposts, list_microposts())}
   end
 
@@ -38,6 +40,25 @@ defmodule SampleWeb.MicropostLive.Index do
     {:ok, _} = Microposts.delete_micropost(micropost)
 
     {:noreply, assign(socket, :microposts, list_microposts())}
+  end
+
+  @impl true
+  def handle_info({:micropost_created, micropost}, socket) do
+    {:noreply, update(socket, :microposts, fn microposts -> [micropost | microposts] end)}
+  end
+
+  @impl true
+  def handle_info({:micropost_updated, micropost}, socket) do
+    {:noreply, update(socket, :microposts, fn microposts ->
+      Enum.map(microposts, &(if &1.id == micropost.id, do: micropost, else: &1))
+    end)}
+  end
+
+  @impl true
+  def handle_info({:micropost_deleted, micropost}, socket) do
+    {:noreply, update(socket, :microposts, fn microposts ->
+      Enum.reject(microposts, &(&1.id == micropost.id))
+    end)}
   end
 
   defp list_microposts do
