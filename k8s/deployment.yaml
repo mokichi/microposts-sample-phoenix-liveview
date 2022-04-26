@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microposts-sample
+  labels:
+    app: microposts-sample
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: microposts-sample
+  template:
+    metadata:
+      labels:
+        app: microposts-sample
+    spec:
+      containers:
+        - name: microposts-sample
+          image: microposts-sample
+          env:
+            - name: DATABASE_URL
+              value: ecto://postgres:postgres@db-postgresql/postgres
+            - name: SECRET_KEY_BASE
+              value: mysecretmysecretmysecretmysecretmysecretmysecretmysecretmysecret
+          ports:
+            - containerPort: 4000
