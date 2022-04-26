@@ -72,4 +72,15 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
+  config :libcluster,
+    topologies: [
+      k8s_example: [
+        strategy: Cluster.Strategy.Kubernetes,
+        config: [
+          mode: :ip,
+          kubernetes_node_basename: "sample",
+          kubernetes_selector: "app=microposts-sample",
+          kubernetes_namespace: "default",
+          polling_interval: 10_000]]]
 end
