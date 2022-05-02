@@ -7,7 +7,10 @@ defmodule Sample.Application do
 
   @impl true
   def start(_type, _args) do
+    topologies = Application.get_env(:libcluster, :topologies, [])
+
     children = [
+      {Cluster.Supervisor, [topologies, [name: Sample.ClusterSupervisor]]},
       # Start the Ecto repository
       Sample.Repo,
       # Start the Telemetry supervisor

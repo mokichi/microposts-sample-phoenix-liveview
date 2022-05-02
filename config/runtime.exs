@@ -41,7 +41,9 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: String.to_integer(System.get_env("PORT") || "4000")
     ],
-    secret_key_base: secret_key_base
+    secret_key_base: secret_key_base,
+    url: [host: "localhost"],
+    server: true
 
   # ## Using releases
   #
@@ -70,4 +72,15 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
+  config :libcluster,
+    topologies: [
+      k8s_example: [
+        strategy: Cluster.Strategy.Kubernetes,
+        config: [
+          mode: :ip,
+          kubernetes_node_basename: "sample",
+          kubernetes_selector: "app=microposts-sample",
+          kubernetes_namespace: "default",
+          polling_interval: 10_000]]]
 end
