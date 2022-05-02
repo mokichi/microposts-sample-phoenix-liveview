@@ -10,6 +10,7 @@ defmodule Sample.Application do
     topologies = Application.get_env(:libcluster, :topologies, [])
 
     children = [
+      {Cluster.Supervisor, [topologies, [name: Sample.ClusterSupervisor]]},
       # Start the Ecto repository
       Sample.Repo,
       # Start the Telemetry supervisor
@@ -17,9 +18,7 @@ defmodule Sample.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Sample.PubSub},
       # Start the Endpoint (http/https)
-      SampleWeb.Endpoint,
-      # Start the libcluster supervisor
-      {Cluster.Supervisor, [topologies, [name: Sample.ClusterSupervisor]]}
+      SampleWeb.Endpoint
       # Start a worker by calling: Sample.Worker.start_link(arg)
       # {Sample.Worker, arg}
     ]

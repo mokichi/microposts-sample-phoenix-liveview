@@ -33,6 +33,7 @@ defmodule Sample.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:libcluster, "~> 3.3"},
       {:phoenix, "~> 1.6.2"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
@@ -48,8 +49,7 @@ defmodule Sample.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
-      {:libcluster, "~> 3.3"}
+      {:plug_cowboy, "~> 2.5"}
     ]
   end
 
