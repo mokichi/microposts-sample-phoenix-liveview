@@ -10,6 +10,10 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
+## Run on Kubernetes
+
+See [Qiita article](https://qiita.com/mokichi/items/c3157804faa295ce1574).
+
 ## Learn more
 
   * Official website: https://www.phoenixframework.org/
